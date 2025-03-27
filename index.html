@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tag Station</title>
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .preview {
+      background-color: #eef6ff;
+      padding: 15px;
+      margin-top: 30px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+<h2>🧾 Tag Station</h2>
+<form id="tagForm">
+<label>Employee Name<input name="employeeName" required="required"/></label>
+<label>Date<input name="date" required="required" type="date"/></label>
+<label>Tag Type
+        <select id="tagType" name="tagType" required="">
+<option value="">Select Type</option>
+<option value="Restock">Restock</option>
+<option value="Core Return">Core Return</option>
+<option value="Rebuildable Part">Rebuildable Part</option>
+<option value="Return to Vendor">Return to Vendor</option>
+<option value="Delivery Received">Delivery Received</option>
+<option value="Palletized Parts Delivery">Palletized Parts Delivery</option>
+</select>
+</label>
+<label>Description<textarea name="description" required="required"></textarea></label>
+<label>Quantity<input name="quantity" required="required" type="number"/></label>
+<label>Work Order Number<input name="workOrderNumber" required="required"/></label>
+<div id="conditionField">
+<label>Condition
+          <select id="conditionSelect" name="condition">
+<option value="">Select</option>
+<option value="New">New</option>
+<option value="Used">Used</option>
+<option value="Rebuilt">Rebuilt</option>
+</select>
+</label>
+</div>
+<div id="barcodeToggle">
+<label>Barcode
+          <select id="hasBarcode">
+<option value="">-- Select --</option>
+<option value="yes">Has a Barcode</option>
+<option value="no">Does Not Have a Barcode</option>
+</select>
+</label>
+<input id="barcodeInput" name="barcode" placeholder="Enter Barcode" style="display:none;"/>
+</div>
+<div id="serialToggle">
+<label>Serial Number
+          <select id="hasSerial">
+<option value="">-- Select --</option>
+<option value="yes">Has a Serial Number</option>
+<option value="no">Does Not Have a Serial Number</option>
+</select>
+</label>
+<input id="serialInput" name="serialNumber" placeholder="Enter Serial Number" style="display:none;"/>
+</div>
+<div id="vendorField">
+<label>Vendor<input name="vendor"/></label>
+</div>
+<div id="reasonField">
+<label>Reason for Return<textarea name="reason"></textarea></label>
+</div>
+<button type="submit">Preview Tag</button>
+</form>
+<div class="preview" id="preview" style="display:none;">
+<h3>Preview</h3>
+<div id="tagContent"></div>
+<button onclick="window.print()">Print Tag</button>
+</div>
+</div>
+<script>
+function setConditionalRequired(fieldId, toggleId) {
+  const toggle = document.getElementById(toggleId);
+  const input = document.getElementById(fieldId);
+  if (toggle && input) {
+    input.required = toggle.value === "yes";
+  }
+}
+
+function updateRequiredFields() {
+  setConditionalRequired("barcodeInput", "hasBarcode");
+  setConditionalRequired("serialInput", "hasSerial");
+  const vendor = document.querySelector('[name="vendor"]');
+  const reason = document.querySelector('[name="reason"]');
+  if (vendor && vendor.offsetParent !== null) vendor.required = true;
+  if (reason && reason.offsetParent !== null) reason.required = true;
+}
+
+document.getElementById("tagForm").addEventListener("submit", function(e) {
+  updateRequiredFields(); // Set required dynamically right before validation
+});
+
+    const tagType = document.getElementById("tagType");
+    const conditionField = document.getElementById("conditionField");
+    const barcodeToggle = document.getElementById("barcodeToggle");
+    const barcodeInput = document.getElementById("barcodeInput");
+    const hasBarcode = document.getElementById("hasBarcode");
+    const serialToggle = document.getElementById("serialToggle");
+    const serialInput = document.getElementById("serialInput");
+    const hasSerial = document.getElementById("hasSerial");
+    const vendorField = document.getElementById("vendorField");
+    const reasonField = document.getElementById("reasonField");
+
+    tagType.addEventListener("change", function () {
+      const value = this.value;
+
+      // Hide all conditional fields
+      conditionField.style.display = "none";
+      barcodeToggle.style.display = "none";
+      barcodeInput.style.display = "none";
+      serialToggle.style.display = "none";
+      serialInput.style.display = "none";
+      vendorField.style.display = "none";
+      reasonField.style.display = "none";
+
+      // Show specific fields based on tag type
+      if (value === "Restock") {
+        reasonField.style.display = "block";
+        conditionField.style.display = "block";
+        barcodeToggle.style.display = "block";
+        serialToggle.style.display = "block";
+      } else if (value === "Core Return") {
+        vendorField.style.display = "block";
+        reasonField.style.display = "block";
+      } else if (value === "Rebuildable Part") {
+        serialToggle.style.display = "block";
+        vendorField.style.display = "block";
+        reasonField.style.display = "block";
+      } else if (value === "Return to Vendor") {
+        conditionField.style.display = "block";
+        barcodeToggle.style.display = "block";
+        serialToggle.style.display = "block";
+        vendorField.style.display = "block";
+        reasonField.style.display = "block";
+      } else if (value === "Delivery Received") {
+        conditionField.style.display = "block";
+        barcodeToggle.style.display = "block";
+        serialToggle.style.display = "block";
+        vendorField.style.display = "block";
+      } else if (value === "Palletized Parts Delivery") {
+        barcodeToggle.style.display = "block";
+        serialToggle.style.display = "block";
+        vendorField.style.display = "block";
+      }
+    });
+
+    hasBarcode.addEventListener("change", function () {
+      barcodeInput.style.display = this.value === "yes" ? "block" : "none";
+    });
+
+    hasSerial.addEventListener("change", function () {
+      serialInput.style.display = this.value === "yes" ? "block" : "none";
+    });
+
+    document.getElementById("tagForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
+      const tagContent = document.getElementById("tagContent");
+      let html = "";
+      data.forEach((value, key) => {
+        if (value) {
+          html += `<p><strong>${key}:</strong> ${value}</p>`;
+        }
+      });
+      tagContent.innerHTML = html;
+      document.getElementById("preview").style.display = "block";
+
+      fetch("https://script.google.com/macros/s/AKfycbycHpmWDJ8TTTV5qsMT50m_4LYpBhFj_h6SDGusovqm2jCkYJHMOFmUmnqA_BY4WaKw/exec", {
+        method: "POST",
+        body: data
+      });
+    });
+  </script>
+</body>
+</html>
