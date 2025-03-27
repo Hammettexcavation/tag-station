@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop Tag Station</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .preview {
+      margin-top: 30px;
+      padding: 15px;
+      background: #eef;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Print Tag</h2>
+    <form id="tagForm">
+      <label for="tagType">Tag Type</label>
+      <select id="tagType" required>
+        <option value="">-- Select Tag Type --</option>
+        <option>Restock Tag</option>
+        <option>Core Return Tag</option>
+        <option>Battery Core Tag</option>
+        <option>Rebuildable Part Tag</option>
+        <option>Return to Vendor Tag</option>
+        <option>Delivery Received Tag</option>
+        <option>Used Part Hold Tag</option>
+        <option>Oversized Item Tag</option>
+      </select>
+
+      <label for="employeeName">Employee Name</label>
+      <input type="text" id="employeeName" required>
+
+      <label for="date">Date</label>
+      <input type="date" id="date" required>
+
+      <label for="barcode">Barcode Number</label>
+      <input type="text" id="barcode" required>
+
+      <label for="description">Part Description</label>
+      <textarea id="description" rows="2" required></textarea>
+
+      <label for="quantity">Quantity Being Returned</label>
+      <input type="number" id="quantity" min="1" required>
+
+      <label for="reason">Reason for Return</label>
+      <textarea id="reason" rows="2" required></textarea>
+
+      <label for="workOrder">Work Order Number</label>
+      <input type="text" id="workOrder" required>
+
+      <label for="condition">Condition</label>
+      <select id="condition" required>
+        <option value="">-- Select Condition --</option>
+        <option>New</option>
+        <option>Used (clean and in good condition)</option>
+      </select>
+
+      <label for="vendor">Vendor it was purchased from</label>
+      <input type="text" id="vendor" required>
+
+      <button type="submit">Preview Tag</button>
+    </form>
+
+    <div id="preview" class="preview" style="display:none;"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('tagForm');
+    const preview = document.getElementById('preview');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const tagHTML = `
+        <h3>${form.tagType.value}</h3>
+        <p><strong>Employee:</strong> ${form.employeeName.value}</p>
+        <p><strong>Date:</strong> ${form.date.value}</p>
+        <p><strong>Barcode:</strong> ${form.barcode.value}</p>
+        <p><strong>Description:</strong> ${form.description.value}</p>
+        <p><strong>Quantity:</strong> ${form.quantity.value}</p>
+        <p><strong>Reason:</strong> ${form.reason.value}</p>
+        <p><strong>Work Order #:</strong> ${form.workOrder.value}</p>
+        <p><strong>Condition:</strong> ${form.condition.value}</p>
+        <p><strong>Vendor:</strong> ${form.vendor.value}</p>
+      `;
+
+      preview.innerHTML = tagHTML;
+      preview.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
