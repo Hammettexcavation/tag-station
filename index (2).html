@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tag Printing App</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f9f9f9; }
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label { margin-top: 10px; display: block; font-weight: bold; }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover { background-color: #45a049; }
+    .preview {
+      margin-top: 30px;
+      padding: 15px;
+      background-color: #e8f4e8;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Tag Generator</h2>
+    <form id="tagForm">
+      <label for="tagType">Select Tag Type:</label>
+      <select id="tagType" required>
+        <option value="">-- Select Tag Type --</option>
+        <option value="restock">Restock Tag</option>
+        <option value="coreReturn">Core Return Tag</option>
+        <option value="rebuildable">Rebuildable Part Tag</option>
+        <option value="returnToVendor">Return to Vendor Tag</option>
+        <option value="deliveryReceived">Delivery Received Tag</option>
+        <option value="oversizedItem">Oversized Item Tag</option>
+      </select>
+
+      <div id="dynamicFields"></div>
+
+      <button type="submit">Preview Tag</button>
+    </form>
+
+    <div id="preview" class="preview" style="display:none;">
+      <h3>Tag Preview</h3>
+      <div id="tagContent"></div>
+      <button id="printButton" style="display:none;">Print Tag</button>
+    </div>
+  </div>
+
+  <script>
+    const tagForm = document.getElementById('tagForm');
+    const dynamicFields = document.getElementById('dynamicFields');
+    const previewDiv = document.getElementById('preview');
+    const tagContent = document.getElementById('tagContent');
+    const printButton = document.getElementById('printButton');
+
+    const fieldTemplates = {
+      common: `
+        <label>Employee Name:<input type="text" name="employeeName" required></label>
+        <label>Date:<input type="date" name="date" required></label>
+        <label>Part Description:<textarea name="partDescription" rows="2" required></textarea></label>
+        <label>Quantity:<input type="number" name="quantity" required></label>
+        <label>Work Order Number:<input type="text" name="workOrderNumber" required></label>
+      `,
+      barcode: `
+        <label>Barcode:
+          <select name="barcodeOption" required onchange="toggleField(this, 'barcodeField')">
+            <option value="none">Does Not Have a Barcode</option>
+            <option value="has">Has a Barcode</option>
+          </select>
+        </label>
+        <div id="barcodeField" style="display:none;">
+          <label>Barcode Number:<input type="text" name="barcode"></label>
+        </div>
+      `,
+      serial: `
+        <label>Serial Number:
+          <select name="serialOption" required onchange="toggleField(this, 'serialField')">
+            <option value="none">Does Not Have a Serial Number</option>
+            <option value="has">Has a Serial Number</option>
+          </select>
+        </label>
+        <div id="serialField" style="display:none;">
+          <label>Serial Number:<input type="text" name="serialNumber"></label>
+        </div>
+      `,
+      reasonReturn: `
+        <label>Reason for Return:<input type="text" name="reasonReturn" required></label>
+      `,
+      reasonRebuild: `
+        <label>Reason for Rebuild:<input type="text" name="reasonRebuild" required></label>
+      `,
+      vendor: `
+        <label>Vendor Name:<input type="text" name="vendor" required></label>
+      `,
+      conditionNewUsed: `
+        <label>Condition:
+          <select name="condition" required>
+            <option value="new">New</option>
+            <option value="used">Used</option>
+          </select>
+        </label>
+      `,
+      conditionNewRebuilt: `
+        <label>Condition:
+          <select name="condition" required>
+            <option value="new">New</option>
+            <option value="rebuilt">Rebuilt</option>
+          </select>
+        </label>
+      `,
+      storageLocation: `
+        <label>Storage Location:<input type="text" name="storageLocation" required></label>
+      `
+    };
+
+    const tagTypeFields = {
+      restock: ['common', 'barcode', 'conditionNewUsed', 'reasonReturn'],
+      coreReturn: ['common', 'barcode', 'serial', 'vendor', 'reasonReturn'],
+      rebuildable: ['common', 'barcode', 'serial', 'reasonRebuild'],
+      returnToVendor: ['common', 'barcode', 'serial', 'vendor', 'reasonReturn', 'conditionNewRebuilt'],
+      deliveryReceived: ['common', 'barcode', 'conditionNewRebuilt'],
+      oversizedItem: ['common', 'barcode', 'serial', 'vendor', 'storageLocation', 'conditionNewRebuilt']
+    };
+
+    document.getElementById('tagType').addEventListener('change', function () {
+      const tagType = this.value;
+      dynamicFields.innerHTML = '';
+      if (tagTypeFields[tagType]) {
+        tagTypeFields[tagType].forEach(field => {
+          dynamicFields.innerHTML += fieldTemplates[field];
+        });
+      }
+    });
+
+    function toggleField(select, fieldId) {
+      const container = document.getElementById(fieldId);
+      if (select.value === 'has') {
+        container.style.display = 'block';
+        container.querySelector('input').required = true;
+      } else {
+        container.style.display = 'none';
+        container.querySelector('input').required = false;
+      }
+    }
+
+    tagForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const formData = new FormData(tagForm);
+      let html = '';
+      for (let [key, value] of formData.entries()) {
+        if (key === 'barcodeOption' || key === 'serialOption') continue;
+        html += `<p><strong>${key.replace(/([A-Z])/g, ' $1')}:</strong> ${value}</p>`;
+      }
+      tagContent.innerHTML = html;
+      previewDiv.style.display = 'block';
+      printButton.style.display = 'inline-block';
+    });
+
+    printButton.addEventListener('click', function () {
+      window.print();
+    });
+  </script>
+</body>
+</html>
