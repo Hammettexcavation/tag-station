@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tag Station</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .preview {
+      background-color: #eef6ff;
+      padding: 15px;
+      margin-top: 30px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🧾 Tag Station</h2>
+    <form id="tagForm">
+      <label>Employee Name<input name="employeeName" required /></label>
+      <label>Date<input type="date" name="date" required /></label>
+
+      <label>Tag Type
+        <select name="tagType" id="tagType" required>
+          <option value="">Select Type</option>
+          <option value="Restock">Restock</option>
+          <option value="Core Return">Core Return</option>
+          <option value="Rebuildable Part">Rebuildable Part</option>
+          <option value="Return to Vendor">Return to Vendor</option>
+          <option value="Delivery Received">Delivery Received</option>
+          <option value="Oversized Item">Oversized Item</option>
+        </select>
+      </label>
+
+      <div id="descriptionField">
+        <label>Description<textarea name="description" required></textarea></label>
+      </div>
+      <div id="quantityField">
+        <label>Quantity<input type="number" name="quantity" required /></label>
+      </div>
+      <div id="workOrderField">
+        <label>Work Order Number<input name="workOrderNumber" required /></label>
+      </div>
+      <div id="conditionField">
+        <label>Condition
+          <select name="condition" id="conditionSelect">
+            <option value="">Select</option>
+            <option value="New">New</option>
+            <option value="Used">Used</option>
+            <option value="Rebuilt">Rebuilt</option>
+          </select>
+        </label>
+      </div>
+      <div id="barcodeToggle">
+        <label>Barcode
+          <select id="hasBarcode">
+            <option value="">-- Select --</option>
+            <option value="yes">Has a Barcode</option>
+            <option value="no">Does Not Have a Barcode</option>
+          </select>
+        </label>
+        <input name="barcode" id="barcodeInput" placeholder="Enter Barcode" style="display:none;" />
+      </div>
+      <div id="serialToggle">
+        <label>Serial Number
+          <select id="hasSerial">
+            <option value="">-- Select --</option>
+            <option value="yes">Has a Serial Number</option>
+            <option value="no">Does Not Have a Serial Number</option>
+          </select>
+        </label>
+        <input name="serialNumber" id="serialInput" placeholder="Enter Serial Number" style="display:none;" />
+      </div>
+      <div id="vendorField">
+        <label>Vendor<input name="vendor" /></label>
+      </div>
+      <div id="reasonField">
+        <label>Reason<textarea name="reason"></textarea></label>
+      </div>
+
+      <button type="submit">Preview Tag</button>
+    </form>
+
+    <div id="preview" class="preview" style="display:none;">
+      <h3>Preview</h3>
+      <div id="tagContent"></div>
+      <button onclick="window.print()">Print Tag</button>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("hasBarcode").addEventListener("change", function() {
+      document.getElementById("barcodeInput").style.display = this.value === "yes" ? "block" : "none";
+    });
+
+    document.getElementById("hasSerial").addEventListener("change", function() {
+      document.getElementById("serialInput").style.display = this.value === "yes" ? "block" : "none";
+    });
+
+    
+    document.getElementById("tagType").addEventListener("change", function () {
+      const type = this.value;
+
+      const show = id => document.getElementById(id).style.display = "block";
+      const hide = id => document.getElementById(id).style.display = "none";
+
+      // Reset all optional fields
+      ["conditionField", "vendorField", "reasonField", "barcodeToggle", "serialToggle"].forEach(hide);
+
+      if (type === "Restock") {
+        show("conditionField");
+        show("barcodeToggle");
+        show("serialToggle");
+      } else if (type === "Core Return") {
+        show("vendorField");
+        show("reasonField");
+      } else if (type === "Rebuildable Part") {
+        show("serialToggle");
+        show("reasonField");
+      } else if (type === "Return to Vendor") {
+        show("conditionField");
+        show("vendorField");
+        show("barcodeToggle");
+        show("reasonField");
+      } else if (type === "Delivery Received") {
+        show("conditionField");
+        show("vendorField");
+        show("barcodeToggle");
+      } else if (type === "Oversized Item") {
+        show("vendorField");
+        show("barcodeToggle");
+        show("serialToggle");
+      }
+    });
+    
+      const type = this.value;
+
+      // Show/hide fields based on tag type
+      document.getElementById("conditionField").style.display = (type === "Restock" || type === "Return to Vendor" || type === "Delivery Received") ? "block" : "none";
+      document.getElementById("vendorField").style.display = (type !== "Restock") ? "block" : "none";
+      document.getElementById("reasonField").style.display = (type !== "Delivery Received") ? "block" : "none";
+    });
+
+    document.getElementById("tagForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
+      const tagContent = document.getElementById("tagContent");
+      let html = "";
+      data.forEach((value, key) => {
+        if (value) {
+          html += `<p><strong>${key}:</strong> ${value}</p>`;
+        }
+      });
+      tagContent.innerHTML = html;
+      document.getElementById("preview").style.display = "block";
+
+      // Send to Google Sheets
+      fetch("https://script.google.com/macros/s/AKfycbycHpmWDJ8TTTV5qsMT50m_4LYpBhFj_h6SDGusovqm2jCkYJHMOFmUmnqA_BY4WaKw/exec", {
+        method: "POST",
+        body: data
+      });
+    });
+  </script>
+</body>
+</html>
