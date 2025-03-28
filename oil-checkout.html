@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Oil/Grease Inventory Checkout</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      padding: 20px;
+      text-align: center;
+    }
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+    label, select, input {
+      display: block;
+      margin: 10px auto;
+      width: 80%;
+    }
+    button {
+      background-color: #004aad;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h2>Oil/Grease Inventory Checkout</h2>
+  <form action="https://script.google.com/macros/s/AKfycbycHpmWDJ8TTTV5qsMT50m_4LYpBhFj_h6SDGusovqm2jCkYJHMOFmUmnqA_BY4WaKw/exec" method="POST">
+    <label for="employeeName">Employee Name:</label>
+    <select name="employeeName" required>
+      <option value="">Select Employee</option>
+      <option value="Gaylon">Gaylon</option>
+      <option value="Kaleb">Kaleb</option>
+      <option value="Darin">Darin</option>
+      <option value="Mike">Mike</option>
+      <option value="John">John</option>
+      <option value="Ethan">Ethan</option>
+      <option value="Alex">Alex</option>
+      <option value="Kenny">Kenny</option>
+      <option value="Lynn">Lynn</option>
+      <option value="Kyle">Kyle</option>
+      <option value="Wolf">Wolf</option>
+      <option value="Trey">Trey</option>
+      <option value="Scott">Scott</option>
+      <option value="Brandon">Brandon</option>
+      <option value="Kenneth">Kenneth</option>
+    </select>
+
+    <label for="description">Part Description:</label>
+    <input type="text" name="description" required />
+
+    <label for="quantity">Quantity:</label>
+    <input type="number" name="quantity" required />
+
+    <label for="jobsite">Jobsite:</label>
+    <input type="text" name="jobsite" required />
+
+    <button type="submit">Submit</button>
+  </form>
+</body>
+</html>

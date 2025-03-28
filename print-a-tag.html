@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Print a Tag</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      padding: 20px;
+      text-align: center;
+    }
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      display: inline-block;
+      max-width: 600px;
+      width: 100%;
+    }
+    label, select, input {
+      display: block;
+      margin: 10px auto;
+      width: 80%;
+    }
+    button {
+      background-color: #004aad;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+  <script>
+    function showFields() {
+      var tagType = document.getElementById("tagType").value;
+      var allSections = document.querySelectorAll(".conditional");
+      allSections.forEach(function(section) {
+        section.classList.add("hidden");
+      });
+
+      if (tagType === "New Part") {
+        document.getElementById("newPartFields").classList.remove("hidden");
+      } else if (tagType === "Used Part") {
+        document.getElementById("usedPartFields").classList.remove("hidden");
+      } else if (tagType === "Tool") {
+        document.getElementById("toolFields").classList.remove("hidden");
+      } else if (tagType === "Core Return") {
+        document.getElementById("coreFields").classList.remove("hidden");
+      } else if (tagType === "Rebuildable") {
+        document.getElementById("rebuildableFields").classList.remove("hidden");
+      } else if (tagType === "Return to Vendor") {
+        document.getElementById("vendorFields").classList.remove("hidden");
+      }
+    }
+  </script>
+</head>
+<body>
+  <h2>Print a Tag</h2>
+  <form action="https://script.google.com/macros/s/AKfycbwzMJgGTWNEYfQM9NqN0GiWRKg5D6jPaeT6dNFQCRrfM4tWZy0qfT0hAyVWX3Y-ViNZIw/exec" method="POST">
+    <label for="employeeName">Employee Name:</label>
+    <input type="text" name="employeeName" required />
+
+    <label for="tagType">Tag Type:</label>
+    <select id="tagType" name="tagType" onchange="showFields()" required>
+      <option value="">Select Tag Type</option>
+      <option value="New Part">New Part</option>
+      <option value="Used Part">Used Part</option>
+      <option value="Tool">Tool</option>
+      <option value="Core Return">Core Return</option>
+      <option value="Rebuildable">Rebuildable</option>
+      <option value="Return to Vendor">Return to Vendor</option>
+    </select>
+
+    <!-- Conditional Fields -->
+    <div id="newPartFields" class="conditional hidden">
+      <label for="description">Part Description:</label>
+      <input type="text" name="description" />
+      <label for="quantity">Quantity:</label>
+      <input type="number" name="quantity" />
+      <label for="jobsite">Jobsite:</label>
+      <input type="text" name="jobsite" />
+    </div>
+
+    <div id="usedPartFields" class="conditional hidden">
+      <label for="description">Part Description:</label>
+      <input type="text" name="description" />
+      <label for="serialNumber">Serial Number:</label>
+      <input type="text" name="serialNumber" />
+      <label for="condition">Condition:</label>
+      <select name="condition">
+        <option value="">Select</option>
+        <option value="Good">Good</option>
+        <option value="Fair">Fair</option>
+        <option value="Poor">Poor</option>
+      </select>
+    </div>
+
+    <div id="toolFields" class="conditional hidden">
+      <label for="toolName">Tool Name:</label>
+      <input type="text" name="toolName" />
+      <label for="serialNumber">Serial Number:</label>
+      <input type="text" name="serialNumber" />
+      <label for="barcode">Barcode:</label>
+      <input type="text" name="barcode" />
+    </div>
+
+    <div id="coreFields" class="conditional hidden">
+      <label for="part">Part Being Returned:</label>
+      <input type="text" name="part" />
+      <label for="reason">Reason for Return:</label>
+      <input type="text" name="reason" />
+    </div>
+
+    <div id="rebuildableFields" class="conditional hidden">
+      <label for="serialNumber">Serial Number:</label>
+      <input type="text" name="serialNumber" />
+      <label for="equipment">Equipment It Goes On:</label>
+      <input type="text" name="equipment" />
+    </div>
+
+    <div id="vendorFields" class="conditional hidden">
+      <label for="barcode">Barcode:</label>
+      <input type="text" name="barcode" />
+      <label for="vendor">Vendor:</label>
+      <input type="text" name="vendor" />
+      <label for="reason">Reason for Return:</label>
+      <input type="text" name="reason" />
+    </div>
+
+    <button type="submit">Submit</button>
+  </form>
+</body>
+</html>
