@@ -4,8 +4,8 @@
   <title>Print a Tag</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
       background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -16,20 +16,41 @@
       background: white;
       padding: 30px;
       border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       width: 300px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-    input, select, button {
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+    input, select {
       width: 100%;
-      padding: 10px;
-      margin: 10px 0;
+      padding: 8px;
+      margin-bottom: 10px;
     }
-    #preview {
+    button {
+      width: 100%;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #previewSection {
       display: none;
       margin-top: 20px;
     }
-    .hidden {
-      display: none;
+    ul {
+      padding-left: 20px;
     }
   </style>
 </head>
@@ -37,9 +58,14 @@
   <div class="container">
     <h2>Print a Tag</h2>
     <form id="tagForm">
-      <input type="text" id="employeeName" name="employeeName" placeholder="Employee Name" required>
-      <input type="date" id="date" name="date" required>
-      <select id="tagType" name="tagType" required>
+      <label>Employee Name:</label>
+      <input type="text" name="employeeName" required>
+
+      <label>Date:</label>
+      <input type="date" name="date" required>
+
+      <label>Tag Type:</label>
+      <select name="tagType" required>
         <option value="">Select Type</option>
         <option value="Restock Tag">Restock Tag</option>
         <option value="Rebuildable Part Tag">Rebuildable Part Tag</option>
@@ -47,67 +73,111 @@
         <option value="Delivery Received Tag">Delivery Received Tag</option>
         <option value="Oversized Item Tag">Oversized Item Tag</option>
       </select>
-      <input type="text" id="description" name="description" placeholder="Description">
-      <input type="number" id="quantity" name="quantity" placeholder="Quantity">
-      <input type="text" id="workOrder" name="workOrder" placeholder="Work Order Number">
-      <select id="condition" name="condition">
-        <option value="">Select Condition</option>
+
+      <label>Description:</label>
+      <input type="text" name="description" required>
+
+      <label>Quantity:</label>
+      <input type="number" name="quantity" required>
+
+      <label>Work Order Number:</label>
+      <input type="text" name="workOrder">
+
+      <label>Condition:</label>
+      <select name="condition" required>
+        <option value="">Select</option>
         <option value="New">New</option>
         <option value="Used">Used</option>
       </select>
-      <select id="hasBarcode" onchange="toggleField('barcode', this)">
-        <option value="">Barcode</option>
-        <option value="Has a Barcode">Has a Barcode</option>
+
+      <label>Barcode:</label>
+      <select name="barcodeDropdown" id="barcodeDropdown">
         <option value="Does Not Have a Barcode">Does Not Have a Barcode</option>
+        <option value="Has a Barcode">Has a Barcode</option>
       </select>
-      <input type="text" id="barcode" name="barcode" class="hidden" placeholder="Barcode Number">
-      <select id="hasSerial" onchange="toggleField('serialNumber', this)">
-        <option value="">Serial Number</option>
-        <option value="Has a Serial Number">Has a Serial Number</option>
+      <input type="text" name="barcode" id="barcodeInput" placeholder="Enter Barcode" style="display:none;">
+
+      <label>Serial Number:</label>
+      <select name="serialDropdown" id="serialDropdown">
         <option value="Does Not Have a Serial Number">Does Not Have a Serial Number</option>
+        <option value="Has a Serial Number">Has a Serial Number</option>
       </select>
-      <input type="text" id="serialNumber" name="serialNumber" class="hidden" placeholder="Serial Number">
-      <input type="text" id="vendor" name="vendor" placeholder="Vendor">
-      <input type="text" id="reason" name="reason" placeholder="Reason">
-      <button type="button" onclick="showPreview()">Preview</button>
+      <input type="text" name="serialNumber" id="serialInput" placeholder="Enter Serial #" style="display:none;">
+
+      <label>Vendor:</label>
+      <input type="text" name="vendor">
+
+      <label>Reason:</label>
+      <input type="text" name="reason">
+
+      <button type="submit">Preview</button>
     </form>
 
-    <div id="preview">
+    <div id="previewSection">
       <h3>Preview Your Tag</h3>
       <ul id="previewList"></ul>
-      <button onclick="submitTag()">Print</button>
+      <button onclick="submitToSheet()">Print</button>
     </div>
   </div>
 
   <script>
-    function toggleField(id, select) {
-      const field = document.getElementById(id);
-      field.classList.toggle('hidden', select.value.includes("Does Not"));
-    }
+    const form = document.getElementById("tagForm");
+    const previewList = document.getElementById("previewList");
+    const previewSection = document.getElementById("previewSection");
+    let formData = {};
 
-    function showPreview() {
-      const data = new FormData(document.getElementById('tagForm'));
-      const previewList = document.getElementById('previewList');
-      previewList.innerHTML = '';
-      for (let pair of data.entries()) {
-        previewList.innerHTML += `<li><strong>${pair[0]}:</strong> ${pair[1]}</li>`;
-      }
-      document.getElementById('preview').style.display = 'block';
-    }
+    document.getElementById("barcodeDropdown").addEventListener("change", function () {
+      document.getElementById("barcodeInput").style.display =
+        this.value === "Has a Barcode" ? "block" : "none";
+    });
 
-    function submitTag() {
-      const data = new FormData(document.getElementById('tagForm'));
-      const payload = {};
-      for (let pair of data.entries()) {
-        payload[pair[0]] = pair[1];
+    document.getElementById("serialDropdown").addEventListener("change", function () {
+      document.getElementById("serialInput").style.display =
+        this.value === "Has a Serial Number" ? "block" : "none";
+    });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      // Gather all form data
+      formData = {};
+      new FormData(form).forEach((value, key) => {
+        formData[key] = value;
+      });
+
+      // Show preview
+      previewList.innerHTML = "";
+      for (const [key, value] of Object.entries(formData)) {
+        if (
+          (key === "barcode" && formData["barcodeDropdown"] !== "Has a Barcode") ||
+          (key === "serialNumber" && formData["serialDropdown"] !== "Has a Serial Number")
+        ) {
+          continue;
+        }
+        const li = document.createElement("li");
+        li.innerHTML = `<strong>${key}:</strong> ${value}`;
+        previewList.appendChild(li);
       }
+
+      form.style.display = "none";
+      previewSection.style.display = "block";
+    });
+
+    function submitToSheet() {
       fetch("https://script.google.com/macros/s/AKfycbycHpmWDJ8TTTV5qsMT50m_4LYpBhFj_h6SDGusovqm2jCkYJHMOFmUmnqA_BY4WaKw/exec", {
         method: "POST",
-        mode: 'no-cors',
-        headers: {"Content-Type": "application/x-www-form-urlencoded"},
-        body: new URLSearchParams(payload)
-      });
-      window.print();
+        body: new URLSearchParams(formData),
+      })
+        .then((res) => res.text())
+        .then((data) => {
+          alert("Tag submitted successfully!");
+          window.print();
+          location.reload();
+        })
+        .catch((err) => {
+          alert("Error submitting tag.");
+          console.error(err);
+        });
     }
   </script>
 </body>
