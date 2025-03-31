@@ -9,8 +9,9 @@
       background-color: #f4f4f4;
       display: flex;
       justify-content: center;
-      align-items: center;
-      height: 100vh;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding-top: 40px;
       margin: 0;
     }
 
@@ -50,12 +51,33 @@
     button:hover {
       background-color: #0056b3;
     }
+
+    .preview-container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      max-width: 500px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .preview-container ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .preview-container li {
+      margin: 10px 0;
+    }
+
+    .preview-container strong {
+      text-transform: capitalize;
+    }
   </style>
 </head>
 <body>
-  <div class="form-container">
+  <div class="form-container" id="formView">
     <h2>Print a Tag</h2>
-    <form method="POST" action="https://script.google.com/macros/s/AKfycbycHpmWDJ8TTTV5qsMT50m_4LYpBhFj_h6SDGusovqm2jCkYJHMOFmUmnqA_BY4WaKw/exec">
+    <form id="tagForm">
       <label>Employee Name:</label>
       <input type="text" name="employeeName" required>
 
@@ -116,38 +138,63 @@
     </form>
   </div>
 
+  <div class="preview-container" id="previewView" style="display: none;">
+    <h2>Preview Your Tag</h2>
+    <ul id="previewList"></ul>
+    <button onclick="submitTag()">Print</button>
+  </div>
+
   <script>
     function toggleBarcodeField() {
-      const barcodeOption = document.getElementById("barcodeOption").value;
-      const barcodeField = document.getElementById("barcodeField");
-      barcodeField.style.display = (barcodeOption === "has") ? "block" : "none";
-      barcodeField.required = (barcodeOption === "has");
+      const val = document.getElementById("barcodeOption").value;
+      const field = document.getElementById("barcodeField");
+      field.style.display = (val === "has") ? "block" : "none";
+      field.required = (val === "has");
     }
 
     function toggleSerialField() {
-      const serialOption = document.getElementById("serialOption").value;
-      const serialField = document.getElementById("serialField");
-      serialField.style.display = (serialOption === "has") ? "block" : "none";
-      serialField.required = (serialOption === "has");
+      const val = document.getElementById("serialOption").value;
+      const field = document.getElementById("serialField");
+      field.style.display = (val === "has") ? "block" : "none";
+      field.required = (val === "has");
     }
 
     function previewTag() {
-      const form = document.querySelector("form");
-      const formData = new FormData(form);
+      const form = document.getElementById("tagForm");
+      const data = new FormData(form);
+      const list = document.getElementById("previewList");
+      list.innerHTML = "";
 
-      let previewHtml = "<h2>Preview Your Tag</h2><ul style='text-align:left'>";
-      for (const [key, value] of formData.entries()) {
-        if (key !== "barcodeOption" && key !== "serialOption") {
-          previewHtml += `<li><strong>${key.replace(/([A-Z])/g, ' $1')}:</strong> ${value}</li>`;
+      data.forEach((value, key) => {
+        if (value) {
+          list.innerHTML += `<li><strong>${key.replace(/([A-Z])/g, ' $1')}:</strong> ${value}</li>`;
         }
-      }
-      previewHtml += "</ul><button onclick='submitTag()'>Print</button>";
+      });
 
-      document.body.innerHTML = previewHtml;
+      // Save to session for re-submit
+      sessionStorage.setItem("tagData", JSON.stringify(Object.fromEntries(data.entries())));
+
+      document.getElementById("formView").style.display = "none";
+      document.getElementById("previewView").style.display = "block";
     }
 
     function submitTag() {
-      document.forms[0].submit();
+      const data = JSON.parse(sessionStorage.getItem("tagData") || "{}");
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = "https://script.google.com/macros/s/AKfycbycHpmWDJ8TTTV5qsMT50m_4LYpBhFj_h6SDGusovqm2jCkYJHMOFmUmnqA_BY4WaKw/exec";
+
+      for (const key in data) {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = data[key];
+        form.appendChild(input);
+      }
+
+      document.body.appendChild(form);
+      form.submit();
+      window.print();
     }
   </script>
 </body>
