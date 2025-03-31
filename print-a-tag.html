@@ -1,143 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Print a Tag</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f4f4f4;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      justify-content: start;
-      padding: 20px;
+      height: 100vh;
+      margin: 0;
     }
-    h1 {
-      margin-bottom: 20px;
-    }
-    form, #preview {
+
+    .form-container {
       background: white;
-      padding: 20px;
+      padding: 30px;
       border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      max-width: 400px;
-      width: 100%;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 320px;
     }
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
+
+    h2 {
+      text-align: center;
     }
+
+    label {
+      display: block;
+      margin-top: 12px;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
     button {
-      padding: 10px 15px;
-      margin-top: 10px;
+      background-color: #007bff;
+      color: white;
       font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
     }
-    .hidden {
-      display: none;
+
+    button:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
 <body>
+  <div class="form-container">
+    <h2>Print a Tag</h2>
+    <form method="POST" action="https://script.google.com/macros/s/AKfycbycHpmWDJ8TTTV5qsMT50m_4LYpBhFj_h6SDGusovqm2jCkYJHMOFmUmnqA_BY4WaKw/exec">
+      <label>Employee Name:</label>
+      <input type="text" name="employeeName" required>
 
-<h1>Print a Tag</h1>
+      <label>Date:</label>
+      <input type="date" name="date" required>
 
-<form id="tagForm">
-  <label>Employee Name:</label>
-  <input type="text" name="employeeName" required />
+      <label>Tag Type:</label>
+      <select name="tagType" required>
+        <option value="">Select Type</option>
+        <option>Restock Tag</option>
+        <option>Rebuildable Part Tag</option>
+        <option>Return to Vendor Tag</option>
+        <option>Delivery Received Tag</option>
+        <option>Oversized Item Tag</option>
+        <option>Battery Core Tag</option>
+        <option>Core Return Tag</option>
+      </select>
 
-  <label>Date:</label>
-  <input type="date" name="date" required />
+      <label>Description:</label>
+      <input type="text" name="description" required>
 
-  <label>Tag Type:</label>
-  <select name="tagType" required>
-    <option value="">Select Type</option>
-    <option>Restock Tag</option>
-    <option>Rebuildable Part Tag</option>
-    <option>Return to Vendor Tag</option>
-    <option>Delivery Received Tag</option>
-    <option>Oversized Item Tag</option>
-    <option>Core Return Tag</option>
-    <option>Battery Core Tag</option>
-  </select>
+      <label>Quantity:</label>
+      <input type="number" name="quantity" min="1">
 
-  <label>Description:</label>
-  <input type="text" name="description" required />
+      <label>Work Order Number:</label>
+      <input type="text" name="workOrder">
 
-  <label>Quantity:</label>
-  <input type="text" name="quantity" />
+      <label>Condition:</label>
+      <select name="condition" required>
+        <option value="">Select</option>
+        <option>New</option>
+        <option>Used</option>
+      </select>
 
-  <label>Work Order Number:</label>
-  <input type="text" name="workOrderNumber" />
+      <label>Barcode:</label>
+      <select id="barcodeOption" onchange="toggleBarcodeField()" required>
+        <option value="">Select</option>
+        <option value="has">Has a Barcode</option>
+        <option value="no">Does Not Have a Barcode</option>
+      </select>
+      <input type="text" id="barcodeField" name="barcode" placeholder="Enter Barcode" style="display:none;">
 
-  <label>Condition:</label>
-  <select name="condition">
-    <option value="">Select</option>
-    <option>New</option>
-    <option>Used</option>
-    <option>Rebuilt</option>
-  </select>
+      <label>Serial Number:</label>
+      <select id="serialOption" onchange="toggleSerialField()" required>
+        <option value="">Select</option>
+        <option value="has">Has a Serial Number</option>
+        <option value="no">Does Not Have a Serial Number</option>
+      </select>
+      <input type="text" id="serialField" name="serialNumber" placeholder="Enter Serial Number" style="display:none;">
 
-  <label>Barcode:</label>
-  <input type="text" name="barcode" />
+      <label>Vendor:</label>
+      <input type="text" name="vendor">
 
-  <label>Serial Number:</label>
-  <input type="text" name="serialNumber" />
+      <label>Reason:</label>
+      <input type="text" name="reason">
 
-  <label>Vendor:</label>
-  <input type="text" name="vendor" />
+      <button type="button" onclick="previewTag()">Preview</button>
+    </form>
+  </div>
 
-  <label>Reason:</label>
-  <input type="text" name="reason" />
+  <script>
+    function toggleBarcodeField() {
+      const barcodeOption = document.getElementById("barcodeOption").value;
+      const barcodeField = document.getElementById("barcodeField");
+      barcodeField.style.display = (barcodeOption === "has") ? "block" : "none";
+      barcodeField.required = (barcodeOption === "has");
+    }
 
-  <button type="submit">Submit</button>
-</form>
+    function toggleSerialField() {
+      const serialOption = document.getElementById("serialOption").value;
+      const serialField = document.getElementById("serialField");
+      serialField.style.display = (serialOption === "has") ? "block" : "none";
+      serialField.required = (serialOption === "has");
+    }
 
-<div id="preview" class="hidden">
-  <h2>Review Your Tag</h2>
-  <div id="previewContent"></div>
-  <button onclick="submitFinal()">Print Tag</button>
-</div>
+    function previewTag() {
+      const form = document.querySelector("form");
+      const formData = new FormData(form);
 
-<script>
-  const form = document.getElementById("tagForm");
-  const preview = document.getElementById("preview");
-  const previewContent = document.getElementById("previewContent");
-  let formData = {};
+      let previewHtml = "<h2>Preview Your Tag</h2><ul style='text-align:left'>";
+      for (const [key, value] of formData.entries()) {
+        if (key !== "barcodeOption" && key !== "serialOption") {
+          previewHtml += `<li><strong>${key.replace(/([A-Z])/g, ' $1')}:</strong> ${value}</li>`;
+        }
+      }
+      previewHtml += "</ul><button onclick='submitTag()'>Print</button>";
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    formData = Object.fromEntries(new FormData(form));
-    previewContent.innerHTML = `
-      <p><strong>Employee:</strong> ${formData.employeeName}</p>
-      <p><strong>Date:</strong> ${formData.date}</p>
-      <p><strong>Tag Type:</strong> ${formData.tagType}</p>
-      <p><strong>Description:</strong> ${formData.description}</p>
-      <p><strong>Quantity:</strong> ${formData.quantity}</p>
-      <p><strong>Work Order Number:</strong> ${formData.workOrderNumber}</p>
-      <p><strong>Condition:</strong> ${formData.condition}</p>
-      <p><strong>Barcode:</strong> ${formData.barcode}</p>
-      <p><strong>Serial Number:</strong> ${formData.serialNumber}</p>
-      <p><strong>Vendor:</strong> ${formData.vendor}</p>
-      <p><strong>Reason:</strong> ${formData.reason}</p>
-    `;
-    form.classList.add("hidden");
-    preview.classList.remove("hidden");
-  });
+      document.body.innerHTML = previewHtml;
+    }
 
-  function submitFinal() {
-    fetch("https://script.google.com/macros/s/AKfycbycHpmWDJ8TTTV5qsMT50m_4LYpBhFj_h6SDGusovqm2jCkYJHMOFmUmnqA_BY4WaKw/exec", {
-      method: "POST",
-      body: new URLSearchParams(formData),
-      headers: { "Content-Type": "application/x-www-form-urlencoded" }
-    }).then(res => {
-      window.print();
-      location.reload();
-    });
-  }
-</script>
-
+    function submitTag() {
+      document.forms[0].submit();
+    }
+  </script>
 </body>
 </html>
