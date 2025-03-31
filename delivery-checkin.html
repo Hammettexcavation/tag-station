@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Oil/Grease Inventory Checkout</title>
+  <title>Oil/Grease Inventory Check-In</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -34,9 +34,8 @@
   </style>
 </head>
 <body>
-  <h2>Oil/Grease Inventory Checkout</h2>
-  <form action="https://script.google.com/macros/s/AKfycbycHpmWDJ8TTTV5qsMT50m_4LYpBhFj_h6SDGusovqm2jCkYJHMOFmUmnqA_BY4WaKw/exec" method="POST">
-    
+  <h2>Oil/Grease Inventory Check-In</h2>
+  <form action="https://script.google.com/macros/s/AKfycbypb59Cd2FljLQgkSCPpTK-9shhpz-RfZbXi5GoupCyU-JzdrfuGWaV1qZn_w1cDbre/exec" method="POST">
     <label for="employeeName">Employee Name:</label>
     <select name="employeeName" required>
       <option value="">Select Employee</option>
@@ -58,43 +57,10 @@
     </select>
 
     <label for="part">Part Description:</label>
-    <select name="part" required>
-      <option value="">Select Part</option>
-      <option value="JOHN DEERE, HYD 46, 5 GALLON BUCKET">JOHN DEERE, HYD 46, 5 GALLON BUCKET</option>
-      <option value="JOHN DEERE, GL-5, 5 GALLON BUCKET">JOHN DEERE, GL-5, 5 GALLON BUCKET</option>
-      <option value="JOHN DEERE, HD SYN TRANS, 5 GALLON BUCKET">JOHN DEERE, HD SYN TRANS, 5 GALLON BUCKET</option>
-      <option value="JOHN DEERE, HYDRAU, 5 GALLON BUCKET">JOHN DEERE, HYDRAU, 5 GALLON BUCKET</option>
-      <option value="JOHN DEERE, PLUS 50II, 5 GALLON BUCKET">JOHN DEERE, PLUS 50II, 5 GALLON BUCKET</option>
-      <option value="JOHN DEERE, HY-GARD, 5 GALLON BUCKET">JOHN DEERE, HY-GARD, 5 GALLON BUCKET</option>
-      <option value="CAT, HYDRO ADVANCED 10, 5 GALLON BUCKET">CAT, HYDRO ADVANCED 10, 5 GALLON BUCKET</option>
-      <option value="CAT, TRANS & DRIVETRAIN 30, 5 GALLON BUCKET">CAT, TRANS & DRIVETRAIN 30, 5 GALLON BUCKET</option>
-      <option value="CAT, TRANS & DRIVETRAIN 50, 5 GALLON BUCKET">CAT, TRANS & DRIVETRAIN 50, 5 GALLON BUCKET</option>
-      <option value="CAT, ELC COOLANT , 5 GALLON BUCKET">CAT, ELC COOLANT , 5 GALLON BUCKET</option>
-      <option value="KOMATSU, ENGINE OIL SAE 10W-30, 5 GALLON BUCKET">KOMATSU, ENGINE OIL SAE 10W-30, 5 GALLON BUCKET</option>
-      <option value="KOMATSU, POWERTRAIN OIL TO10 SAE10W, 5 GALLON BUCKET">KOMATSU, POWERTRAIN OIL TO10 SAE10W, 5 GALLON BUCKET</option>
-      <option value="KOMATSU, POWERTRAIN OIL TO30 SAE30W, 5 GALLON BUCKET">KOMATSU, POWERTRAIN OIL TO30 SAE30W, 5 GALLON BUCKET</option>
-      <option value="KOMATSU, AXLE OIL SAE80W AX080, 5 GALLON BUCKET">KOMATSU, AXLE OIL SAE80W AX080, 5 GALLON BUCKET</option>
-      <option value="KOMATSU, HYDRO OIL VG56 H056-HE, 5 GALLON BUCKET">KOMATSU, HYDRO OIL VG56 H056-HE, 5 GALLON BUCKET</option>
-      <option value="KOMATSU, HYDRO OIL IS0 VG46 H046-HM, 5 GALLON BUCKET">KOMATSU, HYDRO OIL IS0 VG46 H046-HM, 5 GALLON BUCKET</option>
-      <option value="KOMATSU, SUPERCOOLANT AF-NAC, 5 GALLON BUCKET">KOMATSU, SUPERCOOLANT AF-NAC, 5 GALLON BUCKET</option>
-      <option value="CHEVRON, DELO SYN ATF HD, 5 GALLON BUCKET">CHEVRON, DELO SYN ATF HD, 5 GALLON BUCKET</option>
-      <option value="CHEVRON, AUTO TRANS FLUID MD-3, 5 GALLON BUCKET">CHEVRON, AUTO TRANS FLUID MD-3, 5 GALLON BUCKET</option>
-      <option value="WIRTGEN, GEAR OIL PGLP220, 5 GALLON BUCKET">WIRTGEN, GEAR OIL PGLP220, 5 GALLON BUCKET</option>
-      <option value="WIRTGEN, GEAR OIL PGLP150, 5 GALLON BUCKET">WIRTGEN, GEAR OIL PGLP150, 5 GALLON BUCKET</option>
-      <option value="VOLVO WET BRAKE OIL , 5 GALLON BUCKET">VOLVO WET BRAKE OIL , 5 GALLON BUCKET</option>
-      <option value="EXTREME, DXIII MERC, 5 GALLON BUCKETS">EXTREME, DXIII MERC, 5 GALLON BUCKETS</option>
-      <option value="PERFORMANCE EDGE AW46 HYDRAULIC, 5 GALLON BUCKETS">PERFORMANCE EDGE AW46 HYDRAULIC, 5 GALLON BUCKETS</option>
-      <option value="PERFORMANCE EDGE SYN TRANS 50, 5 GALLON BUCKETS">PERFORMANCE EDGE SYN TRANS 50, 5 GALLON BUCKETS</option>
-      <option value="PETRO-CANADA AUTO TRANS, 5 GALLON BUCKETS">PETRO-CANADA AUTO TRANS, 5 GALLON BUCKETS</option>
-      <option value="PRIMROSE POWER KLENZ ID, 55 GALLON DRUM">PRIMROSE POWER KLENZ ID, 55 GALLON DRUM</option>
-      <!-- Add other parts if needed -->
-    </select>
+    <input type="text" name="part" required>
 
-    <label for="quantity">Quantity:</label>
-    <input type="number" name="quantity" required />
-
-    <label for="jobsite">Jobsite:</label>
-    <input type="text" name="jobsite" required />
+    <label for="quantity">Quantity Checked In:</label>
+    <input type="number" name="quantity" required>
 
     <button type="submit">Submit</button>
   </form>
