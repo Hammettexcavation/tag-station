@@ -1,152 +1,141 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Print a Tag</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
       padding: 20px;
-      text-align: center;
     }
-
-    form {
-      background: #fff;
+    h1 {
+      margin-bottom: 20px;
+    }
+    form, #preview {
+      background: white;
       padding: 20px;
       border-radius: 8px;
-      display: inline-block;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
     }
-
-    label, input, select {
-      display: block;
-      margin: 10px auto;
-      width: 80%;
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
     }
-
     button {
-      background-color: #004aad;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
+      padding: 10px 15px;
+      margin-top: 10px;
       font-size: 16px;
-      cursor: pointer;
     }
-
     .hidden {
       display: none;
     }
   </style>
-  <script>
-    function updateFormFields() {
-      const tagType = document.getElementById("tagType").value;
-      const fieldsToHide = document.querySelectorAll(".field");
-      fieldsToHide.forEach(field => field.classList.add("hidden"));
-
-      if (tagType === "Delivery Received Tag") {
-        document.getElementById("descriptionField").classList.remove("hidden");
-        document.getElementById("quantityField").classList.remove("hidden");
-        document.getElementById("conditionField").classList.remove("hidden");
-        document.getElementById("barcodeField").classList.remove("hidden");
-        document.getElementById("workOrderField").classList.remove("hidden");
-      } else if (tagType === "Restock Tag") {
-        document.getElementById("descriptionField").classList.remove("hidden");
-        document.getElementById("quantityField").classList.remove("hidden");
-        document.getElementById("reasonField").classList.remove("hidden");
-        document.getElementById("barcodeField").classList.remove("hidden");
-        document.getElementById("conditionField").classList.remove("hidden");
-        document.getElementById("workOrderField").classList.remove("hidden");
-      } else if (tagType === "Core Return Tag" || tagType === "Battery Core Tag") {
-        document.getElementById("descriptionField").classList.remove("hidden");
-        document.getElementById("quantityField").classList.remove("hidden");
-        document.getElementById("reasonField").classList.remove("hidden");
-        document.getElementById("workOrderField").classList.remove("hidden");
-        document.getElementById("serialNumberField").classList.remove("hidden");
-        document.getElementById("vendorField").classList.remove("hidden");
-      } else if (tagType === "Rebuildable Part Tag") {
-        document.getElementById("descriptionField").classList.remove("hidden");
-        document.getElementById("reasonField").classList.remove("hidden");
-        document.getElementById("serialNumberField").classList.remove("hidden");
-        document.getElementById("conditionField").classList.remove("hidden");
-      } else if (tagType === "Return to Vendor Tag") {
-        document.getElementById("descriptionField").classList.remove("hidden");
-        document.getElementById("barcodeField").classList.remove("hidden");
-        document.getElementById("serialNumberField").classList.remove("hidden");
-      } else if (tagType === "Oversized Item Tag") {
-        document.getElementById("descriptionField").classList.remove("hidden");
-        document.getElementById("barcodeField").classList.remove("hidden");
-        document.getElementById("vendorField").classList.remove("hidden");
-      }
-    }
-  </script>
 </head>
 <body>
-  <h2>Print a Tag</h2>
-  <form action="https://script.google.com/macros/s/AKfycbycHpmWDJ8TTTV5qsMT50m_4LYpBhFj_h6SDGusovqm2jCkYJHMOFmUmnqA_BY4WaKw/exec" method="POST">
-    <label for="employeeName">Employee Name:</label>
-    <input type="text" name="employeeName" required>
 
-    <label for="date">Date:</label>
-    <input type="date" name="date" required>
+<h1>Print a Tag</h1>
 
-    <label for="tagType">Tag Type:</label>
-    <select name="tagType" id="tagType" required onchange="updateFormFields()">
-      <option value="">Select Tag Type</option>
-      <option value="Delivery Received Tag">Delivery Received Tag</option>
-      <option value="Restock Tag">Restock Tag</option>
-      <option value="Core Return Tag">Core Return Tag</option>
-      <option value="Battery Core Tag">Battery Core Tag</option>
-      <option value="Rebuildable Part Tag">Rebuildable Part Tag</option>
-      <option value="Return to Vendor Tag">Return to Vendor Tag</option>
-      <option value="Oversized Item Tag">Oversized Item Tag</option>
-    </select>
+<form id="tagForm">
+  <label>Employee Name:</label>
+  <input type="text" name="employeeName" required />
 
-    <div id="descriptionField" class="field hidden">
-      <label for="description">Description:</label>
-      <input type="text" name="description">
-    </div>
+  <label>Date:</label>
+  <input type="date" name="date" required />
 
-    <div id="quantityField" class="field hidden">
-      <label for="quantity">Quantity:</label>
-      <input type="number" name="quantity">
-    </div>
+  <label>Tag Type:</label>
+  <select name="tagType" required>
+    <option value="">Select Type</option>
+    <option>Restock Tag</option>
+    <option>Rebuildable Part Tag</option>
+    <option>Return to Vendor Tag</option>
+    <option>Delivery Received Tag</option>
+    <option>Oversized Item Tag</option>
+  </select>
 
-    <div id="reasonField" class="field hidden">
-      <label for="reason">Reason:</label>
-      <input type="text" name="reason">
-    </div>
+  <label>Description:</label>
+  <input type="text" name="description" required />
 
-    <div id="barcodeField" class="field hidden">
-      <label for="barcode">Barcode:</label>
-      <input type="text" name="barcode">
-    </div>
+  <label>Quantity:</label>
+  <input type="text" name="quantity" />
 
-    <div id="conditionField" class="field hidden">
-      <label for="condition">Condition:</label>
-      <select name="condition">
-        <option value="">Select</option>
-        <option value="New">New</option>
-        <option value="Used">Used</option>
-        <option value="Rebuilt">Rebuilt</option>
-      </select>
-    </div>
+  <label>Work Order Number:</label>
+  <input type="text" name="workOrderNumber" />
 
-    <div id="serialNumberField" class="field hidden">
-      <label for="serialNumber">Serial Number:</label>
-      <input type="text" name="serialNumber">
-    </div>
+  <label>Condition:</label>
+  <select name="condition">
+    <option value="">Select</option>
+    <option>New</option>
+    <option>Used</option>
+    <option>Rebuilt</option>
+  </select>
 
-    <div id="vendorField" class="field hidden">
-      <label for="vendor">Vendor:</label>
-      <input type="text" name="vendor">
-    </div>
+  <label>Barcode:</label>
+  <input type="text" name="barcode" />
 
-    <div id="workOrderField" class="field hidden">
-      <label for="workOrderNumber">Work Order Number:</label>
-      <input type="text" name="workOrderNumber">
-    </div>
+  <label>Serial Number:</label>
+  <input type="text" name="serialNumber" />
 
-    <button type="submit">Submit</button>
-  </form>
+  <label>Vendor:</label>
+  <input type="text" name="vendor" />
+
+  <label>Reason:</label>
+  <input type="text" name="reason" />
+
+  <button type="submit">Submit</button>
+</form>
+
+<div id="preview" class="hidden">
+  <h2>Review Your Tag</h2>
+  <div id="previewContent"></div>
+  <button onclick="submitFinal()">Print Tag</button>
+</div>
+
+<script>
+  const form = document.getElementById("tagForm");
+  const preview = document.getElementById("preview");
+  const previewContent = document.getElementById("previewContent");
+  let formData = {};
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    formData = Object.fromEntries(new FormData(form));
+    previewContent.innerHTML = `
+      <p><strong>Employee:</strong> ${formData.employeeName}</p>
+      <p><strong>Date:</strong> ${formData.date}</p>
+      <p><strong>Tag Type:</strong> ${formData.tagType}</p>
+      <p><strong>Description:</strong> ${formData.description}</p>
+      <p><strong>Quantity:</strong> ${formData.quantity}</p>
+      <p><strong>Work Order Number:</strong> ${formData.workOrderNumber}</p>
+      <p><strong>Condition:</strong> ${formData.condition}</p>
+      <p><strong>Barcode:</strong> ${formData.barcode}</p>
+      <p><strong>Serial Number:</strong> ${formData.serialNumber}</p>
+      <p><strong>Vendor:</strong> ${formData.vendor}</p>
+      <p><strong>Reason:</strong> ${formData.reason}</p>
+    `;
+    form.classList.add("hidden");
+    preview.classList.remove("hidden");
+  });
+
+  function submitFinal() {
+    fetch("https://script.google.com/macros/s/AKfycbycHpmWDJ8TTTV5qsMT50m_4LYpBhFj_h6SDGusovqm2jCkYJHMOFmUmnqA_BY4WaKw/exec", {
+      method: "POST",
+      body: new URLSearchParams(formData),
+      headers: { "Content-Type": "application/x-www-form-urlencoded" }
+    }).then(res => {
+      window.print();
+      location.reload();
+    });
+  }
+</script>
+
 </body>
 </html>
