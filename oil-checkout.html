@@ -118,7 +118,7 @@
     <label for="jobsite">Jobsite:</label>
     <input type="text" name="jobsite" required />
 
-    <button type="submit">Submit</button>
+    <button type="submit" onclick="this.disabled=true; this.innerText='Submitting...'; this.form.submit();">Submit</button>
   </form>
 </body>
 </html>
