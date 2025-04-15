@@ -114,7 +114,7 @@
     <label for="quantity">Quantity Checked In:</label>
     <input type="number" name="quantity" required />
 
-    <button type="submit">Submit</button>
+    <button type="submit" onclick="this.disabled=true; this.innerText='Submitting...'; this.form.submit();">Submit</button>
   </form>
 </body>
 </html>
