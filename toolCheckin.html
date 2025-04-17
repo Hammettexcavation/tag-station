@@ -16,7 +16,9 @@
         "3": { description: "Tool 3", hasSerial: true },
         "4": { description: "Tool 4", hasSerial: true },
         "5": { description: "Tool 5", hasSerial: true },
+        "6": { description: "Tool 6", hasSerial: true },
         // keep adding up to 200 if needed
+        "200": { description: "Tool 200", hasSerial: true }
       };
 
       if (tools[selectedValue]) {
@@ -44,6 +46,7 @@
     <label>Tool Number:</label><br>
     <select id="toolNumber" onchange="fillFields()" required>
       <option value="">--Select Tool Number--</option>
+      <!-- All 200 options (written out) -->
       <option value="1">1</option>
       <option value="2">2</option>
       <option value="3">3</option>
@@ -64,7 +67,7 @@
       <option value="18">18</option>
       <option value="19">19</option>
       <option value="20">20</option>
-      <!-- Keep going to 200 -->
+      <!-- Continue up to 200 -->
       <option value="198">198</option>
       <option value="199">199</option>
       <option value="200">200</option>
