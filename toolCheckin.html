@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <h2>Tool Check-In Form</h2>
+    <form method="post" action="YOUR_SCRIPT_WEBAPP_URL">
+      <label>Employee Name:</label><br>
+      <input type="text" name="employeeName" required><br><br>
+
+      <label>Tool Description:</label><br>
+      <input type="text" name="toolDescription" required><br><br>
+
+      <label>Serial Number:</label><br>
+      <input type="text" name="serialNumber"><br><br>
+
+      <label>Condition on Return:</label><br>
+      <select name="condition" required>
+        <option value="">--Select--</option>
+        <option value="Operational - Ready to Send Out">Operational - Ready to Send Out</option>
+        <option value="Needs Service">Needs Service</option>
+        <option value="Broken">Broken</option>
+      </select><br><br>
+
+      <label>Notes:</label><br>
+      <textarea name="notes"></textarea><br><br>
+
+      <input type="hidden" name="action" value="checkin">
+      <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>
