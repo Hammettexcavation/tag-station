@@ -1,33 +1,75 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <base target="_top">
-  </head>
-  <body>
-    <h2>Tool Check-In Form</h2>
-    <form method="post" action="https://script.google.com/macros/s/AKfycbzOiWKQbgelua1hxa2_nQLhpdnqq8VqzOR-TUE8rbn9H2eA94P6aO74SfmaoSvLBFyS/exec">
-      <label>Employee Name:</label><br>
-      <input type="text" name="employeeName" required><br><br>
+<head>
+  <base target="_top">
+  <script>
+    function fillFields() {
+      var toolDropdown = document.getElementById("toolNumber");
+      var serialField = document.getElementById("serialNumber");
+      var descriptionField = document.getElementById("toolDescription");
 
-      <label>Tool Description:</label><br>
-      <input type="text" name="toolDescription" required><br><br>
+      var selectedValue = toolDropdown.value;
 
-      <label>Serial Number:</label><br>
-      <input type="text" name="serialNumber"><br><br>
+      // Lookup Table (Hard Coded for now)
+      var tools = {
+        "1": { description: "Tool 1", hasSerial: true },
+        "2": { description: "Tool 2", hasSerial: true },
+        "3": { description: "Tool 3", hasSerial: true },
+        "4": { description: "Tool 4", hasSerial: true },
+        "5": { description: "Tool 5", hasSerial: true },
+        // You can expand the lookup descriptions later
+      };
 
-      <label>Condition on Return:</label><br>
-      <select name="condition" required>
-        <option value="">--Select--</option>
-        <option value="Operational - Ready to Send Out">Operational - Ready to Send Out</option>
-        <option value="Needs Service">Needs Service</option>
-        <option value="Broken">Broken</option>
-      </select><br><br>
+      if (tools[selectedValue]) {
+        descriptionField.value = tools[selectedValue].description;
+        if (tools[selectedValue].hasSerial) {
+          serialField.value = selectedValue;
+        } else {
+          serialField.value = "N/A";
+        }
+      } else {
+        descriptionField.value = "";
+        serialField.value = "";
+      }
+    }
+  </script>
+</head>
 
-      <label>Notes:</label><br>
-      <textarea name="notes"></textarea><br><br>
+<body>
+  <h2>Tool Check-In Form</h2>
+  <form method="post" action="https://script.google.com/macros/s/YOUR_DEPLOYMENT_URL/exec">
 
-      <input type="hidden" name="action" value="checkin">
-      <input type="submit" value="Submit">
-    </form>
-  </body>
+    <label>Employee Name:</label><br>
+    <input type="text" name="employeeName" required><br><br>
+
+    <label>Tool Number:</label><br>
+    <select id="toolNumber" onchange="fillFields()" required>
+      <option value="">--Select Tool Number--</option>
+      <!-- START OPTIONS 1-200 -->
+      <!-- Pasted All 200 Options -->
+      " + [...Array(200)].map((_, i) => `<option value="${i+1}">${i+1}</option>`).join('\n') + "
+      <!-- END OPTIONS -->
+    </select><br><br>
+
+    <label>Tool Description:</label><br>
+    <input type="text" id="toolDescription" name="toolDescription" readonly required><br><br>
+
+    <label>Serial Number:</label><br>
+    <input type="text" id="serialNumber" name="serialNumber" readonly required><br><br>
+
+    <label>Condition on Return:</label><br>
+    <select name="condition" required>
+      <option value="">--Select Condition--</option>
+      <option value="Operational - Ready to Send Out">Operational - Ready to Send Out</option>
+      <option value="Needs Service">Needs Service</option>
+      <option value="Broken">Broken</option>
+    </select><br><br>
+
+    <label>Notes:</label><br>
+    <textarea name="notes" rows="3" cols="40"></textarea><br><br>
+
+    <input type="hidden" name="action" value="checkin">
+    <input type="submit" value="Submit">
+  </form>
+</body>
 </html>
