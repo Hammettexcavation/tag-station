@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <base target="_top">
   <script>
@@ -10,14 +10,13 @@
 
       var selectedValue = toolDropdown.value;
 
-      // Lookup Table (Hard Coded)
       var tools = {
-        "1": { description: "1", hasSerial: true },
-        "2": { description: "2", hasSerial: true },
-        "3": { description: "3", hasSerial: true },
-        "4": { description: "4", hasSerial: true },
-        "5": { description: "5", hasSerial: true },
-        // Add more as needed up to 200
+        "1": { description: "Tool 1", hasSerial: true },
+        "2": { description: "Tool 2", hasSerial: true },
+        "3": { description: "Tool 3", hasSerial: true },
+        "4": { description: "Tool 4", hasSerial: true },
+        "5": { description: "Tool 5", hasSerial: true },
+        // keep adding up to 200 if needed
       };
 
       if (tools[selectedValue]) {
@@ -37,18 +36,38 @@
 
 <body>
   <h2>Tool Check-In Form</h2>
-  <form method="post" action="https://script.google.com/macros/s/YOUR_DEPLOYMENT_URL/exec">
-
+  <form method="post" action="https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec">
+    
     <label>Employee Name:</label><br>
     <input type="text" name="employeeName" required><br><br>
 
     <label>Tool Number:</label><br>
     <select id="toolNumber" onchange="fillFields()" required>
       <option value="">--Select Tool Number--</option>
-      <!-- START OPTIONS 1-200 -->
-      <!-- Pasted All 200 Options -->
-      " + [...Array(200)].map((_, i) => `<option value="${i+1}">${i+1}</option>`).join('\n') + "
-      <!-- END OPTIONS -->
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+      <option value="11">11</option>
+      <option value="12">12</option>
+      <option value="13">13</option>
+      <option value="14">14</option>
+      <option value="15">15</option>
+      <option value="16">16</option>
+      <option value="17">17</option>
+      <option value="18">18</option>
+      <option value="19">19</option>
+      <option value="20">20</option>
+      <!-- Keep going to 200 -->
+      <option value="198">198</option>
+      <option value="199">199</option>
+      <option value="200">200</option>
     </select><br><br>
 
     <label>Tool Description:</label><br>
@@ -70,6 +89,7 @@
 
     <input type="hidden" name="action" value="checkin">
     <input type="submit" value="Submit">
+
   </form>
 </body>
 </html>
