@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <script>
+      function toggleSerialField() {
+        var serialOption = document.getElementById('serialOption').value;
+        var serialInputDiv = document.getElementById('serialInputDiv');
+        if (serialOption === 'Has a Serial Number') {
+          serialInputDiv.style.display = 'block';
+          document.getElementById('serialNumber').required = true;
+        } else {
+          serialInputDiv.style.display = 'none';
+          document.getElementById('serialNumber').required = false;
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <h2>Tool Checkout Form</h2>
+    <form method="post" action="YOUR_SCRIPT_WEBAPP_URL">
+      <label>Employee Name:</label><br>
+      <input type="text" name="employeeName" required><br><br>
+
+      <label>Tool Description:</label><br>
+      <input type="text" name="toolDescription" required><br><br>
+
+      <label>Serial Number Option:</label><br>
+      <select id="serialOption" onchange="toggleSerialField()" required>
+        <option value="">--Select--</option>
+        <option value="Has a Serial Number">Has a Serial Number</option>
+        <option value="Does Not Have a Serial Number">Does Not Have a Serial Number</option>
+      </select><br><br>
+
+      <div id="serialInputDiv" style="display:none;">
+        <label>Serial Number:</label><br>
+        <input type="text" id="serialNumber" name="serialNumber"><br><br>
+      </div>
+
+      <label>Location (Jobsite/Truck):</label><br>
+      <input type="text" name="location" required><br><br>
+
+      <label>Expected Return Date:</label><br>
+      <input type="date" name="expectedReturnDate"><br><br>
+
+      <input type="hidden" name="action" value="checkout">
+      <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>
