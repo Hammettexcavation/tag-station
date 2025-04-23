@@ -46,10 +46,12 @@
     <input type="number" id="breakdownDays" value="0">
 
     <label>Usage Type</label>
-    <select id="usageType">
-      <option value="In Stock Inventory">In Stock Inventory</option>
-      <option value="Part for Immediate Use">Part for Immediate Use</option>
-    </select>
+    <select id="usageType" required>
+  <option value="" disabled selected>-- Select Usage Type --</option>
+  <option value="In Stock Inventory">In Stock Inventory</option>
+  <option value="Part for Immediate Use">Part for Immediate Use</option>
+</select>
+
 
     <button type="button" onclick="submitForm()">Submit Order</button>
   </form>
