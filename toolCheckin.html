@@ -2,6 +2,62 @@
 <html lang="en">
 <head>
   <base target="_top">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tool Check-In</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+      font-family: Arial, sans-serif;
+      font-size: 22px;
+      height: 100vh;
+    }
+    .container {
+      height: 100vh;
+      overflow-y: auto;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-top: 0;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      font-size: 22px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    input[readonly] {
+      background-color: #eee;
+    }
+    button, input[type="submit"] {
+      margin-top: 20px;
+      background-color: #004aad;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 22px;
+      cursor: pointer;
+      width: 100%;
+    }
+  </style>
   <script>
     function fillFields() {
       var toolDropdown = document.getElementById("toolNumber");
@@ -17,17 +73,12 @@
         "4": { description: "Tool 4", hasSerial: true },
         "5": { description: "Tool 5", hasSerial: true },
         "6": { description: "Tool 6", hasSerial: true },
-        // keep adding up to 200 if needed
         "200": { description: "Tool 200", hasSerial: true }
       };
 
       if (tools[selectedValue]) {
         descriptionField.value = tools[selectedValue].description;
-        if (tools[selectedValue].hasSerial) {
-          serialField.value = selectedValue;
-        } else {
-          serialField.value = "N/A";
-        }
+        serialField.value = tools[selectedValue].hasSerial ? selectedValue : "N/A";
       } else {
         descriptionField.value = "";
         serialField.value = "";
@@ -37,11 +88,11 @@
 </head>
 
 <body>
-  <h2>Tool Check-In Form</h2>
-  <form method="post" action="https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec">
-    
-    <label>Employee Name:</label><br>
-    <input type="text" name="employeeName" required><br><br>
+  <div class="container">
+    <h2>🧰 Tool Check-In</h2>
+    <form method="post" action="https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec">
+      <label>Employee Name:</label>
+      <input type="text" name="employeeName" required>
 
     <label>Tool Number:</label><br>
     <select id="toolNumber" onchange="fillFields()" required>
