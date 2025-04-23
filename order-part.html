@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input, select { width: 100%; padding: 8px; margin-top: 5px; }
+    button { margin-top: 15px; padding: 10px 15px; background-color: #4CAF50; color: white; border: none; }
+  </style>
+</head>
+<body>
+  <h2>➕ Order a Part</h2>
+  <form id="orderForm">
+    <label>Employee Name</label>
+    <input type="text" id="employeeName" required>
+
+    <label>Part Description</label>
+    <input type="text" id="partDescription" required>
+
+    <label>Quantity</label>
+    <input type="number" id="quantity" required>
+
+    <label>Work Order Number</label>
+    <input type="text" id="workOrder">
+
+    <label>Vendor</label>
+    <input type="text" id="vendor">
+
+    <label>Warranty</label>
+    <select id="warranty">
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+    </select>
+
+    <label>Equipment Location</label>
+    <input type="text" id="location">
+
+    <label>Lease Credit - Rain Days</label>
+    <input type="number" id="rainDays" value="0">
+
+    <label>Lease Credit - Breakdown Days</label>
+    <input type="number" id="breakdownDays" value="0">
+
+    <label>Usage Type</label>
+    <select id="usageType">
+      <option value="In Stock Inventory">In Stock Inventory</option>
+      <option value="Part for Immediate Use">Part for Immediate Use</option>
+    </select>
+
+    <button type="button" onclick="submitForm()">Submit Order</button>
+  </form>
+
+  <p id="confirmation" style="color: green;"></p>
+
+  <script>
+    function submitForm() {
+      const data = {
+        employeeName: document.getElementById("employeeName").value,
+        partDescription: document.getElementById("partDescription").value,
+        quantity: document.getElementById("quantity").value,
+        workOrder: document.getElementById("workOrder").value,
+        vendor: document.getElementById("vendor").value,
+        warranty: document.getElementById("warranty").value,
+        location: document.getElementById("location").value,
+        rainDays: document.getElementById("rainDays").value,
+        breakdownDays: document.getElementById("breakdownDays").value,
+        usageType: document.getElementById("usageType").value
+      };
+
+      google.script.run.withSuccessHandler(function() {
+        document.getElementById("confirmation").textContent = "✅ Order submitted!";
+        document.getElementById("orderForm").reset();
+      }).submitPartOrder(data);
+    }
+  </script>
+</body>
+</html>
