@@ -2,19 +2,68 @@
 <html>
 <head>
   <base target="_top">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Ordered Part</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    label { display: block; margin-top: 10px; font-weight: bold; }
-    input, select { width: 100%; padding: 8px; margin-top: 5px; }
-    button { margin-top: 15px; padding: 10px 15px; background-color: #4CAF50; color: white; border: none; }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+    h2 {
+      text-align: center;
+    }
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin: auto;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      font-size: 18px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    p.required-note {
+      color: red;
+      font-size: 18px;
+      text-align: center;
+      margin-top: 15px;
+    }
+    button {
+      margin-top: 20px;
+      background-color: #004aad;
+      color: white;
+      padding: 14px;
+      width: 100%;
+      border: none;
+      border-radius: 6px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    #confirmation {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 20px;
+      color: green;
+    }
   </style>
 </head>
 <body>
-  <h2 style="text-align: center;">➕ Order a Part</h2>
-<p style="text-align: center; color: red; font-size: 20px; margin: 10px 0 20px 0;">
-  *All fields required
-</p>
-<form id="orderForm">
+
+  <h2>➕ Order a Part</h2>
 
   <form id="orderForm">
     <label>Employee Name</label>
@@ -27,43 +76,59 @@
     <input type="number" id="quantity" required>
 
     <label>Work Order Number</label>
-    <input type="text" id="workOrder">
+    <input type="text" id="workOrder" required>
 
     <label>Vendor</label>
-    <input type="text" id="vendor">
+    <input type="text" id="vendor" required>
 
     <label>Warranty</label>
-   <select id="warranty" required>
-  <option value="" disabled selected>-- Select Warranty --</option>
-  <option value="Yes">Yes</option>
-  <option value="No">No</option>
-</select>
-
+    <select id="warranty" required>
+      <option value="" disabled selected>-- Select Warranty (Yes/No) --</option>
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+    </select>
 
     <label>Equipment Location</label>
-    <input type="text" id="location">
+    <input type="text" id="location" required>
 
-    <label>Lease Credit - Rain Days</label>
-    <input type="number" id="rainDays" value="0">
+    <label>Ownership Type</label>
+    <select id="ownershipType" required>
+      <option value="" disabled selected>-- Select Ownership Type --</option>
+      <option value="Owned">Owned</option>
+      <option value="Leased">Leased</option>
+      <option value="Rented">Rental</option>
+    </select>
 
-    <label>Lease Credit - Breakdown Days</label>
-    <input type="number" id="breakdownDays" value="0">
+    <label>Lease/Rental Credit - Rain Days</label>
+    <input type="number" id="rainDays" value="0" required>
+
+    <label>Lease/Rental Credit - Breakdown Days</label>
+    <input type="number" id="breakdownDays" value="0" required>
 
     <label>Usage Type</label>
     <select id="usageType" required>
-  <option value="" disabled selected>-- Select Usage Type --</option>
-  <option value="In Stock Inventory">In Stock Inventory</option>
-  <option value="Part for Immediate Use">Part for Immediate Use</option>
-</select>
+      <option value="" disabled selected>-- Select Usage Type --</option>
+      <option value="In Stock Inventory">In Stock Inventory</option>
+      <option value="Part for Immediate Use">Part for Immediate Use</option>
+    </select>
 
+    <label>Equipment #</label>
+    <input type="text" id="equipmentNumber" required>
 
-    <button type="button" onclick="submitForm()">Submit Order</button>
+    <p class="required-note">*All fields required</p>
+
+    <button type="submit">Submit</button>
+    <div id="confirmation"></div>
   </form>
 
-  <p id="confirmation" style="color: green;"></p>
-
   <script>
-    function submitForm() {
+    const form = document.getElementById("orderForm");
+    const confirmation = document.getElementById("confirmation");
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      confirmation.textContent = "";
+
       const data = {
         employeeName: document.getElementById("employeeName").value,
         partDescription: document.getElementById("partDescription").value,
@@ -72,16 +137,21 @@
         vendor: document.getElementById("vendor").value,
         warranty: document.getElementById("warranty").value,
         location: document.getElementById("location").value,
+        ownershipType: document.getElementById("ownershipType").value,
         rainDays: document.getElementById("rainDays").value,
         breakdownDays: document.getElementById("breakdownDays").value,
-        usageType: document.getElementById("usageType").value
+        usageType: document.getElementById("usageType").value,
+        equipmentNumber: document.getElementById("equipmentNumber").value
       };
 
       google.script.run.withSuccessHandler(function() {
-        document.getElementById("confirmation").textContent = "✅ Order submitted!";
-        document.getElementById("orderForm").reset();
+        confirmation.textContent = "✅ Order submitted successfully!";
+        form.reset();
+      }).withFailureHandler(function() {
+        confirmation.textContent = "❌ Submission failed. Please try again.";
+        confirmation.style.color = "red";
       }).submitPartOrder(data);
-    }
+    });
   </script>
 </body>
 </html>
