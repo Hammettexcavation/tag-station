@@ -2,62 +2,96 @@
 <html>
 <head>
   <title>Oil/Grease Inventory Checkout</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      width: 100vw;
       font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
+      background-color: #f4f4f4;
+    }
+
+    .form-wrapper {
+      height: 100vh;
+      width: 100vw;
       padding: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h2 {
       text-align: center;
+      margin-bottom: 20px;
+      font-size: 48px;
     }
+
     form {
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      display: inline-block;
-      max-width: 600px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    label {
+      margin: 10px 0 5px;
+      font-weight: bold;
+      font-size: 48px;
+    }
+
+    input, select {
+      padding: 30px;
+      font-size: 48px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
       width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 20px;
     }
-    label, select, input {
-      display: block;
-      margin: 10px auto;
-      width: 80%;
-    }
+
     button {
+      padding: 30px;
+      font-size: 48px;
       background-color: #004aad;
       color: white;
-      padding: 10px 20px;
       border: none;
-      border-radius: 6px;
-      font-size: 16px;
+      border-radius: 5px;
       cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #00337f;
     }
   </style>
 </head>
 <body>
-  <h2>Oil/Grease Inventory Checkout</h2>
- <form action="https://script.google.com/macros/s/AKfycbwzMJgGTWNEYfQM9NqN0GiWRKg5D6jPaeT6dNFQCRrfM4tWZy0qfT0hAyVWX3Y-ViNZIw/exec
-" method="POST">
-    <label for="employeeName">Employee Name:</label>
-    <select name="employeeName" required>
-      <option value="">Select Employee</option>
-      <option value="Gaylon">Gaylon</option>
-      <option value="Kaleb">Kaleb</option>
-      <option value="Darin">Darin</option>
-      <option value="Mike">Mike</option>
-      <option value="John">John</option>
-      <option value="Ethan">Ethan</option>
-      <option value="Alex">Alex</option>
-      <option value="Kenny">Kenny</option>
-      <option value="Lynn">Lynn</option>
-      <option value="Kyle">Kyle</option>
-      <option value="Wolfe">Wolfe</option>
-      <option value="Trey">Trey</option>
-      <option value="Scott">Scott</option>
-      <option value="Brandon">Brandon</option>
-      <option value="Kenneth">Kenneth</option>
-    </select>
-
-<label for="part">Part Description:</label>
+  <div class="form-wrapper">
+    <h2>Oil/Grease Inventory Checkout</h2>
+    <form action="https://script.google.com/macros/s/AKfycbwzMJgGTWNEYfQM9NqN0GiWRKg5D6jPaeT6dNFQCRrfM4tWZy0qfT0hAyVWX3Y-ViNZIw/exec" method="POST">
+      
+      <label for="employeeName">Employee Name:</label>
+      <select name="employeeName" required>
+        <option value="">Select Employee</option>
+        <option value="Gaylon">Gaylon</option>
+        <option value="Kaleb">Kaleb</option>
+        <option value="Darin">Darin</option>
+        <option value="Mike">Mike</option>
+        <option value="John">John</option>
+        <option value="Ethan">Ethan</option>
+        <option value="Alex">Alex</option>
+        <option value="Kenny">Kenny</option>
+        <option value="Lynn">Lynn</option>
+        <option value="Kyle">Kyle</option>
+        <option value="Wolfe">Wolfe</option>
+        <option value="Trey">Trey</option>
+        <option value="Scott">Scott</option>
+        <option value="Brandon">Brandon</option>
+        <option value="Kenneth">Kenneth</option>
+      </select>
+      <label for="part">Part Description:</label>
 <select name="part" required>
   <option value="">Select Part</option>
   <option value="JOHN DEERE, HYD 46, 5 GALLON BUCKET">JOHN DEERE, HYD 46, 5 GALLON BUCKET</option>
