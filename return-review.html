@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      h2 {
+        margin-bottom: 15px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      th, td {
+        border: 1px solid #ccc;
+        padding: 6px;
+        text-align: left;
+      }
+      th {
+        background-color: #f3f3f3;
+      }
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>🛠️ Return Review - Parts 15+ Days Old</h2>
+    <table id="reviewTable">
+      <thead></thead>
+      <tbody></tbody>
+    </table>
+
+    <script>
+      function renderReviewTable(data) {
+        const tableHead = document.querySelector("#reviewTable thead");
+        const tableBody = document.querySelector("#reviewTable tbody");
+
+        // Clear existing content
+        tableHead.innerHTML = "";
+        tableBody.innerHTML = "";
+
+        // Headers
+        const headerRow = document.createElement("tr");
+        data[0].forEach(col => {
+          const th = document.createElement("th");
+          th.textContent = col;
+          headerRow.appendChild(th);
+        });
+        tableHead.appendChild(headerRow);
+
+        // Rows
+        for (let i = 1; i < data.length; i++) {
+          const row = document.createElement("tr");
+          data[i].forEach(cell => {
+            const td = document.createElement("td");
+            td.textContent = cell;
+            row.appendChild(td);
+          });
+          tableBody.appendChild(row);
+        }
+      }
+
+      google.script.run.withSuccessHandler(renderReviewTable).getReturnReviewData();
+    </script>
+  </body>
+</html>
