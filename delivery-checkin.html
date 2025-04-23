@@ -2,34 +2,62 @@
 <html>
 <head>
   <title>Oil/Grease Inventory Check-In</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      font-family: Arial, sans-serif;
+    html, body {
+      margin: 0;
+      padding: 0;
       background-color: #f9f9f9;
-      padding: 20px;
-      text-align: center;
+      font-family: Arial, sans-serif;
+      height: 100%;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    h2 {
+      margin: 20px 0;
+      font-size: 22px;
     }
     form {
       background: #fff;
       padding: 20px;
       border-radius: 8px;
-      display: inline-block;
-      max-width: 600px;
       width: 100%;
+      max-width: 600px;
+      box-sizing: border-box;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-    label, select, input {
+    label {
       display: block;
-      margin: 10px auto;
-      width: 80%;
+      margin-top: 15px;
+      font-weight: bold;
+      font-size: 22px;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      font-size: 22px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
     }
     button {
+      margin-top: 20px;
       background-color: #004aad;
       color: white;
-      padding: 10px 20px;
+      padding: 12px;
+      width: 100%;
       border: none;
       border-radius: 6px;
-      font-size: 16px;
+      font-size: 22px;
       cursor: pointer;
+    }
+    button:hover {
+      background-color: #00337f;
     }
   </style>
 </head>
